@@ -1,23 +1,53 @@
-function AddEntryModal({ isOpen, onClose }) {
+import { useState } from "react";
+
+function AddEntryModal({ isOpen, onClose, onSaveEntry }) {
+  const [title, setTitle] = useState("");
+  const [date, setDate] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [content, setContent] = useState("");
+
   if (!isOpen) {
     return null;
   }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-xl font-bold mb-4">
           Add new entry
         </h2>
 
-        <form className="space-y-4">
+        <form
+          className="space-y-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+
+            const newEntry = {
+              id: crypto.randomUUID(),
+              title,
+              date,
+              imageUrl,
+              content,
+            };
+
+            onSaveEntry(newEntry);
+
+            // reset form
+            setTitle("");
+            setDate("");
+            setImageUrl("");
+            setContent("");
+          }}
+        >
           <div>
             <label className="block text-sm font-medium mb-1">
               Title
             </label>
             <input
               type="text"
-              className="input input-bordered w-full"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2"
               placeholder="Entry title"
             />
           </div>
@@ -28,7 +58,9 @@ function AddEntryModal({ isOpen, onClose }) {
             </label>
             <input
               type="date"
-              className="input input-bordered w-full"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
           </div>
 
@@ -38,7 +70,9 @@ function AddEntryModal({ isOpen, onClose }) {
             </label>
             <input
               type="url"
-              className="input input-bordered w-full"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2"
               placeholder="https://"
             />
           </div>
@@ -48,7 +82,9 @@ function AddEntryModal({ isOpen, onClose }) {
               Content
             </label>
             <textarea
-              className="textarea textarea-bordered w-full"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2"
               rows="4"
               placeholder="Write your entry..."
             />
@@ -57,7 +93,7 @@ function AddEntryModal({ isOpen, onClose }) {
           <div className="flex justify-end gap-2 pt-2">
             <button
               type="button"
-              className="btn btn-ghost"
+              className="px-4 py-2 rounded border"
               onClick={onClose}
             >
               Cancel
@@ -65,13 +101,12 @@ function AddEntryModal({ isOpen, onClose }) {
 
             <button
               type="submit"
-              className="btn btn-primary"
+              className="px-4 py-2 rounded bg-blue-600 text-white"
             >
               Save
             </button>
           </div>
         </form>
-
       </div>
     </div>
   );

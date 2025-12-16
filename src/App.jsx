@@ -34,6 +34,17 @@ function App() {
       <AddEntryModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
+        onSaveEntry={(newEntry) => {
+          const updatedEntries = [newEntry, ...entries];
+          setEntries(updatedEntries);
+
+          localStorage.setItem(
+            "personal-diary-entries-v1",
+            JSON.stringify(updatedEntries)
+          );
+
+          setIsAddModalOpen(false);
+        }}
       />
     </div>
   );
