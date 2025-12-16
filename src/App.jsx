@@ -34,6 +34,26 @@ function App() {
       <AddEntryModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
+        onSaveEntry={(newEntry) => {
+          const entryExistsForDay = entries.some(
+            (entry) => entry.date === newEntry.date
+          );
+
+          if (entryExistsForDay) {
+            alert("An entry for this day already exists. Please come back tomorrow.");
+            return;
+          }
+
+          const updatedEntries = [newEntry, ...entries];
+          setEntries(updatedEntries);
+
+          localStorage.setItem(
+            "personal-diary-entries-v1",
+            JSON.stringify(updatedEntries)
+          );
+
+          setIsAddModalOpen(false);
+        }}
       />
     </div>
   );
