@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import EntryList from "./components/EntryList";
-
+import Header from "./components/Header";
+import AddEntryModal from "./components/AddEntryModal";
 
 function App() {
   // global state
@@ -9,8 +10,6 @@ function App() {
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-
-
 
   // load entries once on app start
   useEffect(() => {
@@ -22,17 +21,31 @@ function App() {
 
   return (
     <div className="min-h-screen p-4">
-      <h1 className="text-2xl font-bold">
-        Personal Diary
-      </h1>
-      <EntryList entries={entries} />
+      <Header onAddEntry={() => setIsAddModalOpen(true)} />
 
+      <EntryList entries={entries} />
 
       {entries.length === 0 && (
         <p className="mt-4 text-gray-500">
           No entries yet.
         </p>
       )}
+
+      <AddEntryModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSaveEntry={(newEntry) => {
+          const updatedEntries = [newEntry, ...entries];
+          setEntries(updatedEntries);
+
+          localStorage.setItem(
+            "personal-diary-entries-v1",
+            JSON.stringify(updatedEntries)
+          );
+
+          setIsAddModalOpen(false);
+        }}
+      />
     </div>
   );
 }
