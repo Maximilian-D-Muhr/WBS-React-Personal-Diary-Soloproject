@@ -71,6 +71,7 @@ function AddEntryModal({ isOpen, onClose }) {
             </button>
           </div>
         </form>
+
       </div>
     </div>
   );
